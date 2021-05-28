@@ -97,16 +97,20 @@ generateAccessToken = (username) => {
 }
 
 app.post("/login", (req, res) => {
-  let sql = `SELECT * FROM usuario WHERE usuario = "${req.body.user}" AND pass = "${crypto.createHmac('sha256', process.env.TOKEN_SECRET).update(req.body.pass).digest('hex')}";`
+  let sql = `SELECT * FROM usuario WHERE usuario = "${req.body.user}";`
   db.get(sql, [], (err,user) => {
   if (err) {
     res.status(400).json({error:err.message})
   }
-  if (user) {
-    token = generateAccessToken(user)
-    res.status(200).json({"status":200,"token":token,"user":user,"sessionTime":sessionTime})
+  if (user !== null && user !== undefined) {
+    if (user['pass'] == crypto.createHmac('sha256', process.env.TOKEN_SECRET).update(req.body.pass).digest('hex')) {
+        token = generateAccessToken(user)
+        res.status(200).json({"status":200,"token":token,"user":user,"sessionTime":sessionTime})
+    } else {
+        res.status(200).json({"status":401,"message":"La contraseña digitada no es la correcta."})
+    }
   } else {
-    res.status(200).json({"status":401,"message":"Error en los datos suministrados."})
+    res.status(200).json({"status":401,"message":"El usuario digitado no existe."})
   }  
   })
 })
