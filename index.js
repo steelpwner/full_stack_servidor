@@ -111,6 +111,20 @@ app.post("/login", (req, res) => {
   })
 })
 
+app.get("/news/:id", (req, res) => {
+    let sql = `SELECT * FROM noticia WHERE id = '${req.params.id}' AND visible=1`
+    db.get(sql, [], (err,news) => {
+    if (err) {
+      return res.status(400).json({error:err.message})
+    }
+    if (news) {
+      return res.status(200).json({"status":200,"noticia":news})
+    } else {
+      return res.status(200).json({"status":422,"message":"La id solicitada no existe."})
+    }  
+    })
+})
+
 app.post("/users/create", validateUserInput, (req, res) => {
     params = req.body
     sql = `SELECT COUNT(*) recount FROM usuario WHERE usuario = "${params.user}" OR correo = "${params.email}"`
@@ -133,7 +147,7 @@ app.post("/users/create", validateUserInput, (req, res) => {
 
 
 app.get("/news", (req, res) => {
-    sql = "SELECT * FROM noticia WHERE visible = 1;"
+    sql = "SELECT * FROM noticia;"
     db.all(sql,{},(err, rows) => {
         if (err) {
             res.status(200).json({"status":400,"error":err.message})
@@ -141,6 +155,17 @@ app.get("/news", (req, res) => {
         return res.status(200).json({"status":200,data:rows})
     })
 })
+
+app.get("/activenews", (req, res) => {
+    sql = "SELECT * FROM noticia WHERE visible=1;"
+    db.all(sql,{},(err, rows) => {
+        if (err) {
+            res.status(200).json({"status":400,"error":err.message})
+        }
+        return res.status(200).json({"status":200,data:rows})
+    })
+})
+
 
 /*
 id INTEGER PRIMARY KEY AUTOINCREMENT,
