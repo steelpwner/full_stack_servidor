@@ -53,8 +53,12 @@ validateUserInput = (req, res, next) => {
             return res.status(200).json({"status":422,"message":"Faltaron parámetros para la creación"})
         }
     }
-    if (!validateEmail(req.body.email) || !validatePhone(req.body.phone)) {
-        return res.status(200).json({"status":422,"message":"Hubo un error al revisar el email o el teléfono, por favor verifíquelos."})
+
+    if (!validateEmail(req.body.email)) {
+        return res.status(200).json({"status":422,"message":"Hubo un error al revisar el correo, por favor verifíquelo."})
+    }
+    if (!validatePhone(req.body.phone)) {
+        return res.status(200).json({"status":422,"message":"Hubo un error al revisar el teléfono, por favor verifíquelo."})
     }
     next()
 }
