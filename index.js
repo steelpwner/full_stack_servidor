@@ -120,7 +120,7 @@ app.post("/login", (req, res) => {
 })
 
 app.get("/news/:id", (req, res) => {
-    let sql = `SELECT * FROM noticia WHERE id = '${req.params.id}' AND visible=1`
+    let sql = `SELECT * FROM noticia WHERE id = '${req.params.id}'`
     db.get(sql, [], (err,news) => {
     if (err) {
       return res.status(400).json({error:err.message})
