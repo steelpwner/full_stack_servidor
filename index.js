@@ -60,10 +60,10 @@ validateUserInput = (req, res, next) => {
     if (!validatePhone(req.body.phone)) {
         return res.status(200).json({"status":422,"message":"Hubo un error al revisar el teléfono, por favor verifíquelo."})
     }
-    if (req.body.user.contains(" ")) {
+    if (req.body.user.includes(" ")) {
         return res.status(200).json({"status":422,"message":"El nombre de usuario no puede contener espacios."})
     }
-    if (req.body.pass.contains(" ")) {
+    if (req.body.pass.includes(" ")) {
         return res.status(200).json({"status":422,"message":"La contraseña no puede contener espacios."})
     }
     next()
