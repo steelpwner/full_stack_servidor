@@ -171,7 +171,7 @@ app.get("/news", (req, res) => {
 })
 
 app.get("/activenews", (req, res) => {
-    sql = "SELECT * FROM noticia WHERE visible=1;"
+    sql = "SELECT * FROM noticia WHERE visible=1 ORDER BY fecha_creacion DESC;"
     db.all(sql,{},(err, rows) => {
         if (err) {
             res.status(200).json({"status":400,"error":err.message})
